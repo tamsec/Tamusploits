@@ -1,0 +1,43 @@
+-------------------------------TO--------------------------------------------
+1)
+>>> plain = fillertextwww.tuturoialspoint.com/execute_lolcode_online.php HAI\nI HAS A WIN\n WIN R "congratulations me i won!"\nVISIBLE WIN\nKTHXBYE
+
+#YOU HAVE TO MANUALLY ESCAPE THE CHARACTERS IN plain FOR THE REST TO WORK
+>>> plainEscaped = 'fillertextwww.tuturoialspoint.com/execute_lolcode_online.php HAI\\nI HAS A WIN\\n WIN R "congratulations me i won!"\\nVISIBLE WIN\\nKTHXBYE'
+
+2)
+>>> eVig(plainEscaped, key)
+'rqesvrghfeiep.althuwtmtlwfiaw.kzy/mqltugh_tzxkhkv_oaoqyq.xaw YAV\\qQ SMA T DZN\\a ZQY D "khuxrnwcwmbbves zh q hav!"\\gCZSVETP IQG\\uBTUAJJQ'
+>>> vigBase = eVig(plainEscaped, key)
+>>> print vigBase
+viginere_mithrandil/rqesvrghfeiep.althuwtmtlwfiaw.kzy/mqltugh_tzxkhkv_oaoqyq.xaw YAV\qQ SMA T DZN\a ZQY D "khuxrnwcwmbbves zh q hav!"\gCZSVETP IQG\uBTUAJJQ
+
+3)
+>>> toCaesar(vigBase, 12)
+'husuzqdq_yuftdmzpux/dcqehdstrquqb.mxftgifyfxirumi.wlk/ycxfgst_fljwtwh_amackc.jmi KMH\\cC EYM F PLZ\\m LCK P "wtgjdzioiynnhqe lt c tmh!"\\sOLEHQFB UCS\\gNFGMVVC'
+>>> caesarBase = toCaesar(vigBase, 12)
+>>> print caesarBase
+caesar/husuzqdq_yuftdmzpux/dcqehdstrquqb.mxftgifyfxirumi.wlk/ycxfgst_fljwtwh_amackc.jmi KMH\cC EYM F PLZ\m LCK P "wtgjdzioiynnhqe lt c tmh!"\sOLEHQFB UCS\gNFGMVVC
+
+4)
+>>> Sub(caesarBase, subKey, 'e')
+'zq"hqyle.h.ibwbo/.snw\\ig.mlwzb"ewhnyb.ba_\\msnxds/smdy.\\d_jfrl/zmsxhnosfcjnjeoq\\qzrz_c\\d R\\EpzZ "/\\ S GFIp\\ FZR G kjnxcwidtd/vveb" fn z n\\e!kphTF"EBSA .ZHpxVSX\\UUZ'
+>>> mySub = Sub(caesarBase, subKey, 'e')
+>>> print mySub
+zq"hqyle.h.ibwbo/.snw\ig.mlwzb"ewhnyb.ba_\msnxds/smdy.\d_jfrl/zmsxhnosfcjnjeoq\qzrz_c\d R\EpzZ "/\ S GFIp\ FZR G kjnxcwidtd/vveb" fn z n\e!kphTF"EBSA .ZHpxVSX\UUZ
+
+
+
+------------------FROM------------------------------------------------------------------------
+>>> Sub(mySub, subKey, 'd')
+'caesar/husuzqdq_yuftdmzpux/dcqehdstrquqb.mxftgifyfxirumi.wlk/ycxfgst_fljwtwh_amackc.jmi KmH\\cC eym F PLZ\\m LCK P "wtgjdzioiynnhqe lt c tmh!"\\sOLeHQFB uCS\\gNFGmVVC'
+>>> unsubbed = Sub(mySub, subKey, 'd')[7:]        #take "caesar" off the beginning
+
+
+>>> toCaesar(unsubbed, 14)
+'viginere_mithrandil/rqesvrghfeiep.althuwtmtlwfiaw.kzy/mqltugh_tzxkhkv_oaoqyq.xaw YaV\\qQ sma T DZN\\a ZQY D "khuxrnwcwmbbves zh q hav!"\\gCZsVETP iQG\\uBTUaJJQ'
+>>> uncaesared = toCaesar(unsubbed, 14)[20:]      #take "viginere_mithrandil" off
+
+>>> IWIN = dVig(uncaesared, key)
+>>> print IWIN
+fillertextwww.tuturoialspoint.com/execute_lolcode_online.php HaI\nI has A WIN\n WIN R "congratulations me i won!"\nVIsIBLE wIN\nKTHxBYE

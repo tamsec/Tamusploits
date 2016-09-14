@@ -1,0 +1,17 @@
+ZOMG! We think this is encrypted with 3 different methods, how to solve??? 
+Luckily, this hacker carries his notebook full of keys around 
+and we pickpocketed it off him. But we could only make out two lines...
+
+abcdefghijklmnopqrstuvwxyz."_/\
+qazw"sxedcrf\vtgbyhn.ujm/i_kolp
+
+
+Here's the string to decode:
+
+zq"hqyle.h.ibwbo/.snw\ig.mlwzb"ewhnyb.ba_\msnxds/smdy.\d_jfrl/zmsxhnosfcjnjeoq\qzrz_c\d r\epzz "/\ s gfip\ fzr g kjnxcwidtd/vveb" fn z n\e!kphtf"ebsa .zhpxvsx\uuz
+
+
+(If you want the extra challenge, make sure all your codes can handle uppercase:)
+
+zq"hqyle.h.ibwbo/.snw\ig.mlwzb"ewhnyb.ba_\msnxds/smdy.\d_jfrl/zmsxhnosfcjnjeoq\qzrz_c\d R\EpzZ "/\ S GFIp\ FZR G kjnxcwidtd/vveb" fn z n\e!kphTF"EBSA .ZHpxVSX\UUZ
+
