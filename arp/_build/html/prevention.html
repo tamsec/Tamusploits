@@ -1,0 +1,245 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>How to detect and prevent ARP spoofing &mdash; arp 1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="arp 1.0 documentation" href="index.html"/>
+        <link rel="prev" title="Performing the spoof attack" href="attack.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> arp
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="vbox.html">Getting Virtualbox Set Up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="attack.html">Performing the spoof attack</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How to detect and prevent ARP spoofing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#victim-detecting-an-attack">Victim: Detecting an attack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#admins-detecting-a-host-scan">Admins: Detecting a host scan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#admins-detecting-an-arp-spoof">Admins: Detecting an ARP spoof</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#admins-just-get-someone-else-to-do-it-all-for-you">Admins: Just get someone else to do it all for you!</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#some-important-info-about-snort">Some important info about Snort</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">arp</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>How to detect and prevent ARP spoofing</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/prevention.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="how-to-detect-and-prevent-arp-spoofing">
+<h1>How to detect and prevent ARP spoofing<a class="headerlink" href="#how-to-detect-and-prevent-arp-spoofing" title="Permalink to this headline">¶</a></h1>
+<p>This is obviously not a comprehensive review, but I&#8217;ll just mention a few things that are relevant about how victims and network admins could detect this sort of thing</p>
+<div class="section" id="victim-detecting-an-attack">
+<h2>Victim: Detecting an attack<a class="headerlink" href="#victim-detecting-an-attack" title="Permalink to this headline">¶</a></h2>
+<p>One of the first things a victim would notice, assuming SSLstrip works (which it often doesn&#8217;t), is that sites that normally browse over HTTPS would be using HTTP instead. There will be no little green lock at the top of the URL and pages might be a little slower.</p>
+</div>
+<div class="section" id="admins-detecting-a-host-scan">
+<h2>Admins: Detecting a host scan<a class="headerlink" href="#admins-detecting-a-host-scan" title="Permalink to this headline">¶</a></h2>
+<p>A precursor to this attack will almost always be a host scan, because the attacker has to know what IPs are active on the network in order to choose a victim. Luckily, due to the nature of a normal (non-newbie) scan, this is usally detectable by even the simplest self-made scripts. You could look for the following things:</p>
+<ul class="simple">
+<li>Any traffic between hosts on the same network except from router to other hosts (as opposed to hosts&#8211;&gt; external network, which is normal traffic)</li>
+<li>Traffic from one host to more than a threshhold number of hosts (say, 5) within a certain time period</li>
+<li>An abnormal number of ARP requests within a certain time period.</li>
+</ul>
+<p>Setting time periods will be up to the discretion of the network admin. False positives are better than missed negatives!</p>
+</div>
+<div class="section" id="admins-detecting-an-arp-spoof">
+<h2>Admins: Detecting an ARP spoof<a class="headerlink" href="#admins-detecting-an-arp-spoof" title="Permalink to this headline">¶</a></h2>
+<p>This one involves probably a few more rules and obviously I don&#8217;t know how real software does it, but you could look for the combination of these three things within a certain time period:</p>
+<ul class="simple">
+<li>Too many ARP responses from one host</li>
+<li>One host having too many IPs</li>
+<li>More than one host having a single IP</li>
+</ul>
+</div>
+<div class="section" id="admins-just-get-someone-else-to-do-it-all-for-you">
+<h2>Admins: Just get someone else to do it all for you!<a class="headerlink" href="#admins-just-get-someone-else-to-do-it-all-for-you" title="Permalink to this headline">¶</a></h2>
+<p>This is probably the best choice anyway&#8211;specialization rules. Let someone who has been doing this for years develop the software and use it. There are several IDS/IPS tools out there for free. However, the most respected and the one I&#8217;d recommend is Snort.</p>
+<div class="section" id="some-important-info-about-snort">
+<h3>Some important info about Snort<a class="headerlink" href="#some-important-info-about-snort" title="Permalink to this headline">¶</a></h3>
+<p>There is literally so much to say about snort I&#8217;ll just say go read the <a class="reference external" href="https://www.snort.org/documents">docs</a> if you&#8217;re interested mostly. But there are a few key things to know.</p>
+<p>If you&#8217;re a single user, no fear! Snort is free.</p>
+<p>If you&#8217;re using Snort in production for a business, the software itself is free but the meat of it&#8211;the actual rules it uses to detect and deter attacks, you&#8217;ll have to pay. The rules aren&#8217;t much, especially compared to software like Fireye. However, if you&#8217;re rich enough, ever since Cisco bought Snort they also have a shiny multi-thousand dollar dashboard to go along with it. Most medium-sized businesses and larger will be willing to pay for their own IDS anyway most likely.</p>
+<p>If you&#8217;re Target, you use FireEye and then ignore it when it warns you.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="attack.html" class="btn btn-neutral" title="Performing the spoof attack" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Squiggles.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

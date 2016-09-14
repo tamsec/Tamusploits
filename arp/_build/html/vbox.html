@@ -1,0 +1,276 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Getting Virtualbox Set Up &mdash; arp 1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="arp 1.0 documentation" href="index.html"/>
+        <link rel="next" title="Performing the spoof attack" href="attack.html"/>
+        <link rel="prev" title="Welcome to our ARP spoofing tutorial!" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> arp
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Virtualbox Set Up</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#install-virtualbox">Install VirtualBox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#making-virtual-machines">Making Virtual Machines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#make-new-machine">Make new machine</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#stick-iso-in-machine">Stick .iso in machine</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-guest-additions">Installing Guest Additions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#kali">Kali</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ubuntu">Ubuntu</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="attack.html">Performing the spoof attack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prevention.html">How to detect an attack like this</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">arp</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Getting Virtualbox Set Up</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/vbox.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="getting-virtualbox-set-up">
+<h1>Getting Virtualbox Set Up<a class="headerlink" href="#getting-virtualbox-set-up" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="install-virtualbox">
+<h2>Install VirtualBox<a class="headerlink" href="#install-virtualbox" title="Permalink to this headline">¶</a></h2>
+<p>Head over to <a class="reference external" href="https://www.virtualbox.org/">VirtualBox.org</a> and download VirtualBox and install it.</p>
+</div>
+<div class="section" id="making-virtual-machines">
+<h2>Making Virtual Machines<a class="headerlink" href="#making-virtual-machines" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Instead of making a VM, you could also directly download a kali VM from Kali&#8217;s site instead.</p>
+</div>
+<p><strong>Tips:</strong></p>
+<ul class="simple">
+<li>I give at least 15GB to each VM as a general rule, dynamically allocated (&#8220;thin provision&#8221; in VMWare) so that it doesn&#8217;t immediately use 15GB of space on disk.</li>
+<li>Kali needs at least 10GB in my experience to succeed installation.</li>
+<li>Give it enough RAM&#8211;I usually do 2GB, but do what your system can handle.</li>
+</ul>
+<div class="section" id="make-new-machine">
+<h3>Make new machine<a class="headerlink" href="#make-new-machine" title="Permalink to this headline">¶</a></h3>
+<p>Click new &gt; VM, follow steps.</p>
+</div>
+<div class="section" id="stick-iso-in-machine">
+<h3>Stick .iso in machine<a class="headerlink" href="#stick-iso-in-machine" title="Permalink to this headline">¶</a></h3>
+<p>You haven&#8217;t done anything but create a shell for a virtual machine; you have to actually give it an operating system to boot. Once you make new machine, stick an iso in it like so:</p>
+<div class="figure align-center">
+<img alt="_images/chooseFile.png" src="_images/chooseFile.png" />
+</div>
+</div>
+</div>
+<div class="section" id="installing-guest-additions">
+<h2>Installing Guest Additions<a class="headerlink" href="#installing-guest-additions" title="Permalink to this headline">¶</a></h2>
+<p>These aren&#8217;t necessary to get a box going, but guest additions for VirtualBox make the experience so much better. It allows you to go to fullsize, drag-and-drop between host and guest machines, share clipboards, and share folders between guest and host.</p>
+<p>Doing this in Kali and Ubuntu or any other system will be different&#8211;Kali actually has its own guest additions in its repositories.</p>
+<div class="section" id="kali">
+<h3>Kali<a class="headerlink" href="#kali" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Kali&#8217;s guest additions are actually added from Kali&#8217;s own repos. Linux uses the concept of &#8220;repositories&#8221; to get updates by adding links to repositories in a file under /etc, specifically /etc/apt/sources.list, that Linux will read and pull packages from. It would be almost like keeping a file under C:/Windows/System32 that tells the system where the Microsoft servers are, but you can also add your own repositories as well and people often do for projects.</p>
+</div>
+<p>In Kali, you actually have to add repositories to the sources.list because for some reason the .iso from the site doesn&#8217;t build this in. Instructions can be found at <a class="reference external" href="http://docs.kali.org/general-use/kali-linux-sources-list-repositories">Kali&#8217;s site</a>. Instructions on their site for installing guest additions are <a class="reference external" href="http://docs.kali.org/general-use/kali-linux-virtual-box-guest">here</a> or below.</p>
+<p>Add this line to /etc/apt/sources.list by doing the following:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> <span class="nb">echo</span> /etc/apt/sources.list &gt;&gt; deb http://http.kali.org/kali kali-rolling main contrib non-free
+<span class="gp">#</span> apt-get update
+<span class="gp">#</span> apt-get install -y virtualbox-guest-x11
+<span class="gp">#</span> reboot
+</pre></div>
+</div>
+<p>Your sources.list should look like this:</p>
+<div class="figure align-center">
+<img alt="_images/sourceslist.png" src="_images/sourceslist.png" />
+</div>
+</div>
+<div class="section" id="ubuntu">
+<h3>Ubuntu<a class="headerlink" href="#ubuntu" title="Permalink to this headline">¶</a></h3>
+<p>From the VirtualBox menu when the VM is booted, click Devices &gt; insert Guest Additions CD. VBox will do the rest for you. If not, consult YouTube.</p>
+<div class="figure align-center">
+<img alt="_images/ga.png" src="_images/ga.png" />
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="attack.html" class="btn btn-neutral float-right" title="Performing the spoof attack" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Welcome to our ARP spoofing tutorial!" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Squiggles.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
