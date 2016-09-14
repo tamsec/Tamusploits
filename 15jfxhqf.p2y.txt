@@ -1,0 +1,46 @@
+﻿"add a few other old challenges"
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch is up-to-date with 'origin/master'.
+#
+# Changes to be committed:
+#	new file:   Images/Images-master/A6ZhTf
+#	new file:   Images/Images-master/ME3xAP
+#	new file:   Images/Images-master/README
+#	new file:   Images/Images-master/cpfJv9
+#	new file:   Images/Images-master/puzzle
+#	new file:   Images/Images-master/vE8v8v
+#	new file:   Pcaps/Pcaps-master/cap.pcap
+#	new file:   Pcaps/Pcaps-master/evidence01.pcap
+#	new file:   Pcaps/Pcaps-master/hbot.pcap
+#	new file:   Pcaps/Pcaps-master/ncl-dns.cap
+#	new file:   Pcaps/Pcaps-master/ncl-http1.pcap
+#	new file:   Pcaps/Pcaps-master/ncl-http2.cap
+#	new file:   Pcaps/Pcaps-master/ncl-pandora.pcap
+#	new file:   Pcaps/Pcaps-master/ncl-telnet.pcap
+#	new file:   Pcaps/Pcaps-master/ragent.pcap
+#	new file:   Pcaps/Pcaps-master/ragent.py
+#	new file:   Pcaps/Pcaps-master/test.pcap
+#	new file:   Powerpoints/Powerpoints-master/Apache- Networking.pptx
+#	new file:   Powerpoints/Powerpoints-master/DNS, Postfix, Dovecot.pptx
+#	new file:   Powerpoints/Powerpoints-master/DNS.pptx
+#	new file:   Powerpoints/Powerpoints-master/Dovecot.pptx
+#	new file:   Powerpoints/Powerpoints-master/Intro to C Makefile.pptx
+#	new file:   Powerpoints/Powerpoints-master/Intro to Perl.pptx
+#	new file:   Powerpoints/Powerpoints-master/Intro to Python.pptx
+#	new file:   Powerpoints/Powerpoints-master/Intro to Ruby.pptx
+#	new file:   Powerpoints/Powerpoints-master/PathsFindSUIDumask.pptx
+#	new file:   Powerpoints/Powerpoints-master/RPiIntegration.pptx
+#	new file:   Powerpoints/Powerpoints-master/Shells_Intro_CLI_Hardware.pptx
+#	new file:   Powerpoints/Powerpoints-master/UNIX_Shell-Scripting_Basics.pptx
+#	new file:   Powerpoints/Powerpoints-master/Unix-history-lab1.pptx
+#	new file:   Powerpoints/Powerpoints-master/remote ssh sudo x hacker ethics.pptx
+#	new file:   Powerpoints/Powerpoints-master/rpm-vi-sed.pptx
+#	new file:   Powerpoints/Powerpoints-master/shells-cmds-file-ops.pptx
+#	new file:   Python-Parfait/Python-Parfait-master/PythonParfait.txt
+#	new file:   Python-Parfait/Python-Parfait-master/README.txt
+#	new file:   Python-Parfait/Python-Parfait-master/ciphers.py
+#	new file:   Python-Parfait/Python-Parfait-master/textforcipher.txt
+#
+
