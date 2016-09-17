@@ -97,23 +97,6 @@ def eVig(plaintext, key):
 			encrypted += plaintext[i]
 	return encrypted
 
-def eVig(plaintext, key): #i is index in plaintext, keyIndex is index in key
-	encrypted = ''
-	keyIndex = 0
-	for i in range(0, len(plaintext)):
-		if plaintext[i].isalpha():
-			if plaintext[i].isupper():
-				encrypted += chr(ord(plaintext[i].lower()) + ord(key[keyIndex])%26).upper()
-			else:
-				encrypted += chr(ord(plaintext[i]) + ord(key[keyIndex])%26)
-			if keyIndex + 1 < len(key):
-				keyIndex += 1
-			else: 
-				keyIndex = 0
-		else:
-			encrypted += plaintext[i]
-	return encrypted
-
 def dVig(ciphered, key): 
 	plain = ""
 	keyIndex = 0
@@ -130,4 +113,23 @@ def dVig(ciphered, key):
 		else:
 			plain += ciphered[i]
 	return plain
+
+#Here is the much more compact way of doing it with ord() that preservers everything in english characters
+def fancyEncVig(plaintext, key):
+        encrypted = ''
+        keyIndex = 0
+        for plainChar in plaintext:
+                encrypted += chr(((ord(plainChar) + ord(key[keyIndex]))  )%94+32)	#Put text into the range of 32-126 after adding the key
+                keyIndex = (keyIndex + 1) % (len(key))					#Roll over position in key when end is reached					
+
+        return encrypted
+
+def fancyDecVig(ciphertext, key):
+        decrypted = ''
+        keyIndex = 0
+        for encChar in ciphertext:
+                decrypted += chr(((ord(encChar) - ord(key[keyIndex])) + 32)%94 + 30)	#Put text back into the range of 32-126 after subtracting the key
+                keyIndex = (keyIndex + 1) % (len(key))				 	#Roll over position in key when end is reached	
+
+        return decrypted
 
