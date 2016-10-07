@@ -1,0 +1,277 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>GDB Basic Tutorial &#8212; gdb 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="gdb 1.0 documentation" href="index.html" />
+    <link rel="next" title="GDB Basic Reversing" href="reversing.html" />
+    <link rel="prev" title="Welcome to gdb’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="gdb-basic-tutorial">
+<h1>GDB Basic Tutorial<a class="headerlink" href="#gdb-basic-tutorial" title="Permalink to this headline">¶</a></h1>
+<p>Gdb is the GNU Project debugger. It allows you to do things like run the program up to a certain point then stop and print out the values of certain variables at that point, or step through the program one line at a time and print out the values of each variable after executing each line. It uses a command line interface. The program being debugged can be written in many languages including Ada, C, C++, Objective-C, Pascal.
+You can learn more about it <a class="reference external" href="https://www.gnu.org/software/gdb/">Here.</a></p>
+<div class="section" id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
+<p>The examples in this tutorial will be done using a Linux console.</p>
+<div class="section" id="compile-code">
+<h3>Compile Code<a class="headerlink" href="#compile-code" title="Permalink to this headline">¶</a></h3>
+<p>In order to debug an executable you must first find or create one.
+In this example we will be using the following code:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#include &lt;stdio.h&gt;</span>
+
+<span class="n">void</span> <span class="n">function1</span><span class="p">();</span>
+<span class="n">void</span> <span class="n">function2</span><span class="p">();</span>
+<span class="n">void</span> <span class="n">function7</span><span class="p">();</span>
+<span class="n">void</span> <span class="n">secret</span><span class="p">();</span>
+
+<span class="nb">int</span> <span class="n">main</span><span class="p">(</span><span class="nb">int</span> <span class="n">argc</span><span class="p">,</span> <span class="n">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="nb">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="nb">int</span> <span class="n">secretFlag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="n">char</span> <span class="n">words</span><span class="p">[]</span> <span class="o">=</span> <span class="s2">&quot;Hello, world!&quot;</span><span class="p">;</span>
+	
+	<span class="n">printf</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">words</span><span class="p">);</span>
+	
+	<span class="k">if</span><span class="p">(</span><span class="n">secretFlag</span><span class="p">)</span>
+		<span class="n">secret</span><span class="p">();</span>
+	
+	<span class="n">function1</span><span class="p">();</span>
+	<span class="n">x</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+	<span class="n">function2</span><span class="p">();</span>
+
+	<span class="k">if</span><span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="mi">7</span><span class="p">)</span>
+		<span class="n">function7</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="n">void</span> <span class="n">function1</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">printf</span><span class="p">(</span><span class="s2">&quot;In function 1</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">void</span> <span class="n">function2</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">printf</span><span class="p">(</span><span class="s2">&quot;In function 2</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">void</span> <span class="n">function7</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">printf</span><span class="p">(</span><span class="s2">&quot;In function7</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">void</span> <span class="n">secret</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">printf</span><span class="p">(</span><span class="s2">&quot;Luke, I am your Father!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now time to compile the program.
+In order for gdb to read symbols (names of variables, functions and types) from your program you need to compile the program with the <cite>-g</cite> flag. The <cite>-o</cite> flag gives the compiled executable the name that you pass it. Here is an example:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> gcc -g example.c -o exWithSymbols
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="basic-debugging">
+<h2>Basic Debugging<a class="headerlink" href="#basic-debugging" title="Permalink to this headline">¶</a></h2>
+<p>Now it is finally time to start debugging!
+Here are some basic commands to get your way around gdb.</p>
+<div class="section" id="starting-gdb">
+<h3>Starting GDB<a class="headerlink" href="#starting-gdb" title="Permalink to this headline">¶</a></h3>
+<p>Here is how to start gdb:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> gdb exWithSymbols
+</pre></div>
+</div>
+<p>The console will look something like this:</p>
+<div class="figure align-center">
+<img alt="_images/gdbStart.png" src="_images/gdbStart.png" />
+</div>
+<p>Before we start running the program we are going to learn about a few commands first.</p>
+</div>
+<div class="section" id="list">
+<h3>List<a class="headerlink" href="#list" title="Permalink to this headline">¶</a></h3>
+<p>The <cite>list</cite> command by default prints out 10 lines of code to the console. This can be changed with <cite>set listsize &lt;count&gt;</cite>. This is very useful whenever you are using the console to write and edit code because it allows you to not have to quit gdb in order to look at the code.</p>
+<div class="figure align-center">
+<img alt="_images/list.png" src="_images/list.png" />
+</div>
+<p><cite>list</cite> can also be used display starting at a certain line number, range of lines, or function with <cite>list &lt;line number&gt;</cite>, <cite>list &lt;starting line&gt;, &lt;ending line&gt;</cite> or <cite>list &lt;function name&gt;</cite>
+Examples:</p>
+<div class="figure align-center">
+<img alt="_images/listRange.png" src="_images/listRange.png" />
+</div>
+<div class="figure align-center">
+<img alt="_images/listFunction.png" src="_images/listFunction.png" />
+</div>
+</div>
+<div class="section" id="breakpoints">
+<h3>Breakpoints<a class="headerlink" href="#breakpoints" title="Permalink to this headline">¶</a></h3>
+<p>Breakpoints are what allow you to pause, or break, a program when it reaches a certain line or function. When you reach a breakpoint while debugging a program you can examine and change variables before resuming execution. To set a breakpoint run <cite>break &lt;line number&gt;</cite> or <cite>break &lt;function name</cite>. To continue after a breakpoint use the <cite>continue</cite> command. To delete a breakpoint user either <cite>clear</cite> to delete all breakpoints or <cite>delete &lt;breakpoint number&gt;</cite> to delete a specific breakpoint.
+Examples:</p>
+<div class="figure align-center">
+<img alt="_images/break.png" src="_images/break.png" />
+</div>
+</div>
+<div class="section" id="run">
+<h3>Run<a class="headerlink" href="#run" title="Permalink to this headline">¶</a></h3>
+<p>Now that we have some basics down we are going to run the program. In order run the program use the command <cite>run</cite>. To run the program with arguments you can either pass them in the command line <cite>run &lt;arg1&gt; &lt;arg2&gt; &lt;argN&gt;</cite> or you can set the arguments that the program will run with everytime with <cite>set args &lt;arg1&gt; &lt;arg2&gt; &lt;argN&gt;</cite></p>
+<div class="figure align-center">
+<img alt="_images/run.png" src="_images/run.png" />
+</div>
+<p>Notice how the program stopped at Breakpoint 2 which is the function main(). From here we can see some basic info already such as the breakpoint number, function currently being run and its arguments, and the current line number of the file we are in. Lets continue to the next breakpoint before looking around.</p>
+<div class="figure align-center">
+<img alt="_images/continue.png" src="_images/continue.png" />
+</div>
+<p>While the program was executing it printed out the first print statement &#8220;Hello, world!&#8221;.</p>
+</div>
+<div class="section" id="print">
+<h3>Print<a class="headerlink" href="#print" title="Permalink to this headline">¶</a></h3>
+<p>Now that we can start examining variables and arguments. In order to look at what is currently stored in a variable use the <cite>print</cite> command. To print a variable simply run <cite>print &lt;variable name&gt;</cite> if you would like to display the variable in different formats you can run the command <cite>print/format &lt;variable name&gt;</cite></p>
+<div class="figure align-center">
+<img alt="_images/print.png" src="_images/print.png" />
+</div>
+</div>
+<div class="section" id="stepping">
+<h3>Stepping<a class="headerlink" href="#stepping" title="Permalink to this headline">¶</a></h3>
+<p>Stepping allows us to move around in the program line by line without having to set a breakpoint at every line. The <cite>step</cite> command goes to the next instruction and enters into functions that it reaches. The <cite>next</cite> command goes to the next instruction but does not enter into functions that it reaches.</p>
+<div class="figure align-center">
+<img alt="_images/stepping.png" src="_images/stepping.png" />
+</div>
+<p>Notice how when I reached function2() in main I used <cite>step</cite> instead of <cite>next</cite> and gdb started displaying the code insided of function2().</p>
+</div>
+<div class="section" id="backtrace">
+<h3>Backtrace<a class="headerlink" href="#backtrace" title="Permalink to this headline">¶</a></h3>
+<p>Backtrace is useful for when you want to see what functions have been called to get to where you are now in the code. The command is simply <cite>backtrace</cite>. One common way of using this is to help figure out segmentation faults. When you reach a seg fault the call stack is still preserved so you can still run commands like <cite>backtrace</cite> and <cite>print</cite> in order to figure out what caused the crash.</p>
+<div class="figure align-center">
+<img alt="_images/backtrace.png" src="_images/backtrace.png" />
+</div>
+</div>
+<div class="section" id="changing-variables">
+<h3>Changing Variables<a class="headerlink" href="#changing-variables" title="Permalink to this headline">¶</a></h3>
+<p>Variables can be changed in run time with gdb. This can be useful when you want to see how a program will react with the variable changed. This is done with <cite>set var &lt;variable name&gt; = &lt;new value&gt;</cite>.</p>
+<div class="figure align-center">
+<img alt="_images/setvar.png" src="_images/setvar.png" />
+</div>
+</div>
+</div>
+<div class="section" id="tips">
+<h2>Tips<a class="headerlink" href="#tips" title="Permalink to this headline">¶</a></h2>
+<p>Every command can be shortened to the point that gdb can still distinguish it from other commands. For example <cite>run</cite> can be shortened <cite>r</cite> or <cite>backtrace</cite> can be shortened to just <cite>bt</cite>.</p>
+</div>
+<div class="section" id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">¶</a></h2>
+<p>You have now learned some of the basic fundamentals of using gdb to debug programs. Knowing how to use gdb can be very useful when you are trying to debug a program through the command line. There are also several other features that are useful when reversing a program. In the next tutorial I will show you how to do some cool stuff with basic reversing using gdb.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">GDB Basic Tutorial</a><ul>
+<li><a class="reference internal" href="#setup">Setup</a><ul>
+<li><a class="reference internal" href="#compile-code">Compile Code</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#basic-debugging">Basic Debugging</a><ul>
+<li><a class="reference internal" href="#starting-gdb">Starting GDB</a></li>
+<li><a class="reference internal" href="#list">List</a></li>
+<li><a class="reference internal" href="#breakpoints">Breakpoints</a></li>
+<li><a class="reference internal" href="#run">Run</a></li>
+<li><a class="reference internal" href="#print">Print</a></li>
+<li><a class="reference internal" href="#stepping">Stepping</a></li>
+<li><a class="reference internal" href="#backtrace">Backtrace</a></li>
+<li><a class="reference internal" href="#changing-variables">Changing Variables</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tips">Tips</a></li>
+<li><a class="reference internal" href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to gdb&#8217;s documentation!</a></li>
+      <li>Next: <a href="reversing.html" title="next chapter">GDB Basic Reversing</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/gdb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Andrew Meserole.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.8</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+      |
+      <a href="_sources/gdb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

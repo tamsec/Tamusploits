@@ -1,0 +1,83 @@
+GDB Basic Reversing
+===================
+This tutorial shows some of the ways you can use gdb combined with object dump to reverse a program.
+
+Setup
+-----
+The examples in this tutorial will be done using a Linux console. For part of the tutorial `objdump` was used alongside gdb.
+ 
+Compile Code
+++++++++++++
+In order to debug an executable you must first find or create one.  
+In this example we will be using the following code:  
+
+.. literalinclude:: example.c
+
+Now time to compile the program.  
+This time we are going to compile the program without the symbol table so that we can reverse it.
+
+.. code-block:: console
+	
+	# gcc example.c -o exWithoutSymbols
+
+
+Basic Reversing
+---------------
+The following commands will aide you in figuring out what a program does. They will also allow you to manipulate the program while it is running in order to make it do what you want it to.
+
+Viewing Assembly
+++++++++++++++++
+In order to view the entire disassembled program we are going to use the program object dump or `objdump`. `objdump -d <filename>` spits out the assembly instructions for that file. Here is an example portion of the disassembled code we are using:  
+
+.. figure::	images/objdump.png
+   :align:  center
+
+Notice how the function names are displayed with their addresses and disassembled code. This will be very useful to us later.  
+  
+Within gdb you can use the `disassemble` command in order to view the assembly code. However you need to know function names in order to view it with `disass <function>`. This is where `objdump` can come in handy.
+
+.. figure::	images/disass.png
+   :align:  center
+
+Breaking
+++++++++
+Since the symbol table was not compiled with the program we cannot simply set break points at line numbers. We can however still place breaks at specific functions or addresses. The command `break *<hex address>` places a break point at that address. 
+
+.. figure::	images/break2.png
+   :align:  center
+
+Examining Registers
++++++++++++++++++++
+In order to view the common registers the command `investigate register <register>` or `i r <register>` for short. This is useful for seeing how the values of registers are changing during the program.
+
+.. figure::	images/register.png
+   :align:  center
+
+Examining Pointers
+++++++++++++++++++
+One very useful command is `examine`, or `x` for short. This allows you to look at the values in specific registers such as the stack pointer or instruction pointer. You can choose how to view what you are examining as well. For example `x/x $esp` will print out the value of the stack pointer in hex. You can also print out multiple values with `x/<n>x $esp`. This will print the next `n` values after the stack pointer.
+
+.. figure::	images/examine.png
+   :align:  center
+
+Note: for 64-bit architectures the stack pointer is stored in `$rsp`
+
+Changing Values of Registers and Flags
+++++++++++++++++++++++++++++++++++++++
+Just like how you can change the value of variables in runtime you can also change the values of registers or flags. One common technique for branching is subtract the two values being compared and test whether or not the result is 0. By changing the values of the flags or registers you can force it branch whichever way you want.
+
+.. figure::	images/set.png
+   :align:  center
+
+Note: `$ZF` is the zero flag that gets set whenever two subtracted values result in zero.
+
+Calling Functions
++++++++++++++++++
+Another way of reaching code that you want without having to follow the program logic is to directly call them in run time. This is done with `call function(arguments)`.
+
+.. figure::	images/calling.png
+   :align:  center
+
+Conclusion
+----------
+Paired with some knowledge of assembly, gdb can be a very powerful reversing tool that will aide you in reversing and understanding how small programs work. Some other, more powerful and interactive, tools that help with reversing and debugging are IDA and OllyDBG.
