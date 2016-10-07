@@ -1,0 +1,239 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>GDB Basic Reversing &#8212; gdb 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="gdb 1.0 documentation" href="index.html" />
+    <link rel="prev" title="GDB Basic Tutorial" href="gdb.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="gdb-basic-reversing">
+<h1>GDB Basic Reversing<a class="headerlink" href="#gdb-basic-reversing" title="Permalink to this headline">¶</a></h1>
+<p>This tutorial shows some of the ways you can use gdb combined with object dump to reverse a program.</p>
+<div class="section" id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
+<p>The examples in this tutorial will be done using a Linux console. For part of the tutorial <cite>objdump</cite> was used alongside gdb.</p>
+<div class="section" id="compile-code">
+<h3>Compile Code<a class="headerlink" href="#compile-code" title="Permalink to this headline">¶</a></h3>
+<p>In order to debug an executable you must first find or create one.
+In this example we will be using the following code:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#include &lt;stdio.h&gt;</span>
+
+<span class="n">void</span> <span class="n">function1</span><span class="p">();</span>
+<span class="n">void</span> <span class="n">function2</span><span class="p">();</span>
+<span class="n">void</span> <span class="n">function7</span><span class="p">();</span>
+<span class="n">void</span> <span class="n">secret</span><span class="p">();</span>
+
+<span class="nb">int</span> <span class="n">main</span><span class="p">(</span><span class="nb">int</span> <span class="n">argc</span><span class="p">,</span> <span class="n">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="nb">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="nb">int</span> <span class="n">secretFlag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="n">char</span> <span class="n">words</span><span class="p">[]</span> <span class="o">=</span> <span class="s2">&quot;Hello, world!&quot;</span><span class="p">;</span>
+	
+	<span class="n">printf</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">words</span><span class="p">);</span>
+	
+	<span class="k">if</span><span class="p">(</span><span class="n">secretFlag</span><span class="p">)</span>
+		<span class="n">secret</span><span class="p">();</span>
+	
+	<span class="n">function1</span><span class="p">();</span>
+	<span class="n">x</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+	<span class="n">function2</span><span class="p">();</span>
+
+	<span class="k">if</span><span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="mi">7</span><span class="p">)</span>
+		<span class="n">function7</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="n">void</span> <span class="n">function1</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">printf</span><span class="p">(</span><span class="s2">&quot;In function 1</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">void</span> <span class="n">function2</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">printf</span><span class="p">(</span><span class="s2">&quot;In function 2</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">void</span> <span class="n">function7</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">printf</span><span class="p">(</span><span class="s2">&quot;In function7</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">void</span> <span class="n">secret</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">printf</span><span class="p">(</span><span class="s2">&quot;Luke, I am your Father!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now time to compile the program.
+This time we are going to compile the program without the symbol table so that we can reverse it.</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> gcc example.c -o exWithoutSymbols
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="basic-reversing">
+<h2>Basic Reversing<a class="headerlink" href="#basic-reversing" title="Permalink to this headline">¶</a></h2>
+<p>The following commands will aide you in figuring out what a program does. They will also allow you to manipulate the program while it is running in order to make it do what you want it to.</p>
+<div class="section" id="viewing-assembly">
+<h3>Viewing Assembly<a class="headerlink" href="#viewing-assembly" title="Permalink to this headline">¶</a></h3>
+<p>In order to view the entire disassembled program we are going to use the program object dump or <cite>objdump</cite>. <cite>objdump -d &lt;filename&gt;</cite> spits out the assembly instructions for that file. Here is an example portion of the code we are using:</p>
+<div class="figure align-center">
+<img alt="_images/objdump.png" src="_images/objdump.png" />
+</div>
+<p>Notice how the function names are displayed with their addresses and disassembled code. This will be very useful to us later.</p>
+<p>Within gdb you can use the <cite>disassemble</cite> command in order to view the assembly code. However you need to know function names in order to view it with <cite>disass &lt;function&gt;</cite>. This is where <cite>objdump</cite> can come in handy.</p>
+<div class="figure align-center">
+<img alt="_images/disass.png" src="_images/disass.png" />
+</div>
+</div>
+<div class="section" id="breaking">
+<h3>Breaking<a class="headerlink" href="#breaking" title="Permalink to this headline">¶</a></h3>
+<p>Since the symbol table was not compiled with the program we cannot simply set break points at line numbers. We can however still place breaks at specific functions or addresses. The command <cite>break *&lt;hex address&gt;</cite> places a break point at that address.</p>
+<div class="figure align-center">
+<img alt="_images/break2.png" src="_images/break2.png" />
+</div>
+</div>
+<div class="section" id="examining-registers">
+<h3>Examining Registers<a class="headerlink" href="#examining-registers" title="Permalink to this headline">¶</a></h3>
+<p>In order to view the common registers the command <cite>investigate register &lt;register&gt;</cite> or <cite>i r &lt;register&gt;</cite> for short. This is useful for seeing how the values of registers are changing during the program.</p>
+<div class="figure align-center">
+<img alt="_images/register.png" src="_images/register.png" />
+</div>
+</div>
+<div class="section" id="examining-pointers">
+<h3>Examining Pointers<a class="headerlink" href="#examining-pointers" title="Permalink to this headline">¶</a></h3>
+<p>One very useful command is <cite>examine</cite>, or <cite>x</cite> for short. This allows you to look at the values in specific registers such as the stack pointer or instruction pointer. You can choose how to view what you are examining as well. For example <cite>x/x $esp</cite> will print out the value of the stack pointer in hex. You can also print out multiple values with <cite>x/&lt;n&gt;x $esp</cite>. This will print the next <cite>n</cite> values after the stack pointer.</p>
+<div class="figure align-center">
+<img alt="_images/examine.png" src="_images/examine.png" />
+</div>
+<p>Note: for 64-bit architectures the stack pointer is stored in <cite>$rsp</cite></p>
+</div>
+<div class="section" id="changing-values-of-registers-and-flags">
+<h3>Changing Values of Registers and Flags<a class="headerlink" href="#changing-values-of-registers-and-flags" title="Permalink to this headline">¶</a></h3>
+<p>Just like how you can change the value of variables in runtime you can also change the values of registers or flags. One common technique for branching is subtract the two values being compared and test whether or not the result is 0. By changing the values of the flags or registers you can force it branch whichever way you want.</p>
+<div class="figure align-center">
+<img alt="_images/set.png" src="_images/set.png" />
+</div>
+<p>Note: <cite>$ZF</cite> is the zero flag that gets set whenever two subtracted values result in zero.</p>
+</div>
+<div class="section" id="calling-functions">
+<h3>Calling Functions<a class="headerlink" href="#calling-functions" title="Permalink to this headline">¶</a></h3>
+<p>Another way of reaching code that you want without having to follow the program logic is to directly call them in run time. This is done with <cite>call function(arguments)</cite>.</p>
+<div class="figure align-center">
+<img alt="_images/calling.png" src="_images/calling.png" />
+</div>
+</div>
+</div>
+<div class="section" id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">¶</a></h2>
+<p>Paired with some knowledge of assembly, gdb can be a very powerful reversing tool that will aide you in reversing and understanding how small programs work. Some other, more powerful and interactive, tools that help with reversing and debugging are IDA and OllyDBG.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">GDB Basic Reversing</a><ul>
+<li><a class="reference internal" href="#setup">Setup</a><ul>
+<li><a class="reference internal" href="#compile-code">Compile Code</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#basic-reversing">Basic Reversing</a><ul>
+<li><a class="reference internal" href="#viewing-assembly">Viewing Assembly</a></li>
+<li><a class="reference internal" href="#breaking">Breaking</a></li>
+<li><a class="reference internal" href="#examining-registers">Examining Registers</a></li>
+<li><a class="reference internal" href="#examining-pointers">Examining Pointers</a></li>
+<li><a class="reference internal" href="#changing-values-of-registers-and-flags">Changing Values of Registers and Flags</a></li>
+<li><a class="reference internal" href="#calling-functions">Calling Functions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="gdb.html" title="previous chapter">GDB Basic Tutorial</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/reversing.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Andrew Meserole.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.8</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+      |
+      <a href="_sources/reversing.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
